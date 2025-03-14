@@ -1,0 +1,12 @@
+.DS_Store
+
+/.idea
+/.vscode
+
+/venv
+/.venv
+*.pyc
+*.pyo
+*/__pycache__
+
+*.sqlite3
