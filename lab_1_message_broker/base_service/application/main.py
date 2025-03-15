@@ -3,7 +3,7 @@ from infrastructure.rabbitmq import RabbitMQClient
 from domain.events import Type1Event
 
 
-def publish_type1_events():
+def publish_events():
     with RabbitMQClient.ctx() as client:
         while True:
             event = Type1Event(content="event content")
@@ -11,5 +11,4 @@ def publish_type1_events():
             time.sleep(5)
 
 
-if __name__ == "__main__":
-    publish_type1_events()
+publish_events()

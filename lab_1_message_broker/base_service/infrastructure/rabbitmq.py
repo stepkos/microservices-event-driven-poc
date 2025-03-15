@@ -1,20 +1,30 @@
 import ssl
 import pika
 import certifi
-from config.constants import RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD
+from config.constants import RABBITMQ_HOST, RABBITMQ_USER, RABBITMQ_PASSWORD, RABBITMQ_PORT, RABBITMQ_PORT_SSL
 from contextlib import contextmanager
 
 from config import logger
 
 
 def get_pika_parameters() -> pika.ConnectionParameters:
+    credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASSWORD)
+    parameters = pika.ConnectionParameters(
+        host=RABBITMQ_HOST,
+        port=RABBITMQ_PORT,
+        credentials=credentials,
+    )
+    return parameters
+
+
+def get_pika_parameters_ssl() -> pika.ConnectionParameters:
     ssl_context = ssl.create_default_context(cafile=certifi.where())
     ssl_options = pika.SSLOptions(ssl_context)
     credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASSWORD)
     parameters = pika.ConnectionParameters(
         host=RABBITMQ_HOST,
         virtual_host=RABBITMQ_USER,
-        port=RABBITMQ_PORT,
+        port=RABBITMQ_PORT_SSL,
         credentials=credentials,
         ssl_options=ssl_options,
     )
@@ -25,7 +35,7 @@ class RabbitMQClient:
     def __init__(
         self,
         parameters: pika.ConnectionParameters = None,
-        auto_connect: bool = True
+        auto_connect: bool = True,
     ):
         self.parameters = parameters or get_pika_parameters()
         self.connection, self.channel = None, None
