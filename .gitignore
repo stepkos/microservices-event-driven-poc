@@ -11,5 +11,5 @@
 
 *.sqlite3
 
-config/.env
+*.env
 
