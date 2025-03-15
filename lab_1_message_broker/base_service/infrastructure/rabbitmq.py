@@ -1,10 +1,17 @@
 import ssl
-import pika
-import certifi
-from config.constants import RABBITMQ_HOST, RABBITMQ_USER, RABBITMQ_PASSWORD, RABBITMQ_PORT, RABBITMQ_PORT_SSL
 from contextlib import contextmanager
 
+import certifi
+import pika
+
 from config import logger
+from config.constants import (
+    RABBITMQ_HOST,
+    RABBITMQ_PASSWORD,
+    RABBITMQ_PORT,
+    RABBITMQ_PORT_SSL,
+    RABBITMQ_USER,
+)
 
 
 def get_pika_parameters() -> pika.ConnectionParameters:
@@ -69,12 +76,10 @@ class RabbitMQClient:
     def publish(self, event_name, message, durable=True):
         self.channel.queue_declare(queue=event_name, durable=durable)
         self.channel.basic_publish(
-            exchange='',
+            exchange="",
             routing_key=event_name,
             body=message,
-            properties=pika.BasicProperties(
-                delivery_mode=pika.DeliveryMode.Persistent
-            )
+            properties=pika.BasicProperties(delivery_mode=pika.DeliveryMode.Persistent),
         )
         logger.info(f"Published {event_name}: {message}")
 
@@ -84,7 +89,7 @@ class RabbitMQClient:
         callback,
         durable: bool = True,
         prefetch_count: int | None = 1,
-        auto_ack: bool = False
+        auto_ack: bool = False,
     ):
         self.channel.queue_declare(queue=event_name, durable=durable)
         if prefetch_count is not None:

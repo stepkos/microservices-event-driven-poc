@@ -1,9 +1,9 @@
 __all__ = ["logger"]
 
-import sys
 import logging
+import sys
 
-from config.constants import LOGGER_FORMAT, LOGGER_DATE_FORMAT
+from config.constants import LOGGER_DATE_FORMAT, LOGGER_FORMAT
 
 
 def configure_logger() -> logging.Logger:

@@ -1,6 +1,7 @@
 import time
-from infrastructure.rabbitmq import RabbitMQClient
+
 from domain.events import Type1Event
+from infrastructure.rabbitmq import RabbitMQClient
 
 
 def publish_events():
