@@ -1,6 +1,6 @@
 import os
 
-SERVICE_NAME = "type_2_publisher_service"
+SERVICE_NAME = "publisher_type_3_events"
 
 LOGGER_FORMAT = f"%(asctime)s {SERVICE_NAME}: %(message)s"
 LOGGER_DATE_FORMAT = "%Y-%m-%d %H:%M:%S"

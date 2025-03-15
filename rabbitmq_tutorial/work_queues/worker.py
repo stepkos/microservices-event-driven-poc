@@ -2,7 +2,7 @@ import sys
 import os
 import pika
 import time
-from config.utils import get_pika_parameters
+from rabbitmq_tutorial.config.utils import get_pika_parameters
 
 parameters = get_pika_parameters()
 

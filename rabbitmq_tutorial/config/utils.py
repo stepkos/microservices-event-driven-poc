@@ -1,7 +1,7 @@
 import ssl
 import pika
 import certifi
-from config.envs import RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD
+from rabbitmq_tutorial.config.envs import RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD
 
 
 def get_pika_parameters() -> pika.ConnectionParameters:

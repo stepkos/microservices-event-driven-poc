@@ -23,8 +23,8 @@ services:
 #    env_file:
 #      - .env
 
-  type_1_publisher_service:
-    build: ./type_1_publisher_service
+  publisher_type_1_events:
+    build: publisher_type_1_events
     depends_on:
       rabbitmq:
         condition: service_healthy
@@ -33,16 +33,16 @@ services:
     deploy:
         replicas: 3
 
-  type_2_publisher_service:
-    build: ./type_2_publisher_service
+  publisher_type_2_events:
+    build: publisher_type_2_events
     depends_on:
       rabbitmq:
         condition: service_healthy
     env_file:
       - .env
 
-  type_3_publisher_service:
-    build: ./type_3_publisher_service
+  publisher_type_3_events:
+    build: publisher_type_3_events
     depends_on:
       rabbitmq:
         condition: service_healthy
