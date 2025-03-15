@@ -15,8 +15,34 @@ services:
       timeout: 5s
       retries: 5
 
-  base_service:
-    build: ./base_service
+#  base_service:
+#    build: ./base_service
+#    depends_on:
+#      rabbitmq:
+#        condition: service_healthy
+#    env_file:
+#      - .env
+
+  type_1_publisher_service:
+    build: ./type_1_publisher_service
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - .env
+    deploy:
+        replicas: 3
+
+  type_2_publisher_service:
+    build: ./type_2_publisher_service
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  type_3_publisher_service:
+    build: ./type_3_publisher_service
     depends_on:
       rabbitmq:
         condition: service_healthy
