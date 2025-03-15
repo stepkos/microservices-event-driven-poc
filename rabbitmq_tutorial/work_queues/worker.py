@@ -12,6 +12,7 @@ def main():
     channel = connection.channel()
 
     channel.queue_declare(queue='task_queue', durable=True)  # durable=True means keep queue after RabbitMQ restart
+    channel.basic_qos(prefetch_count=1)
 
     def callback(ch, method, properties, body):
         print(f" [x] Received {body.decode()}")
