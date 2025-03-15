@@ -1,19 +1,8 @@
-import ssl
 import pika
-import certifi
-from config.envs import RABBITMQ_HOST, RABBITMQ_PORT, RABBITMQ_USER, RABBITMQ_PASSWORD
 
-ssl_context = ssl.create_default_context(cafile=certifi.where())
-ssl_options = pika.SSLOptions(ssl_context)
+from config.utils import get_pika_parameters
 
-credentials = pika.PlainCredentials(RABBITMQ_USER, RABBITMQ_PASSWORD)
-parameters = pika.ConnectionParameters(
-    host=RABBITMQ_HOST,
-    virtual_host=RABBITMQ_USER,
-    port=RABBITMQ_PORT,
-    credentials=credentials,
-    ssl_options=ssl_options,
-)
+parameters = get_pika_parameters()
 
 connection = pika.BlockingConnection(parameters)
 channel = connection.channel()
