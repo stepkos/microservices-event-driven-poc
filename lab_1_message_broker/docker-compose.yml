@@ -48,3 +48,21 @@ services:
         condition: service_healthy
     env_file:
       - .env
+
+  consumer_type_1_events:
+    build: consumer_type_1_events
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - .env
+    deploy:
+      replicas: 2
+
+  consumer_type_2_events:
+    build: consumer_type_2_events
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - .env
