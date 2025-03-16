@@ -8,11 +8,10 @@ event_classes = BaseEvent.__subclasses__()
 def publish_events():
     with RabbitMQClient.ctx() as client:
         for event_class in event_classes:
-            event = event_class(content="event content")
-            client.queue_declare(event.get_event_name())
+            client.queue_declare(event_class.get_event_name())
 
         while True:
-            event = Type1Event(content="event content")
+            event = Type1Event(content="event type 1 content")
             client.publish(event.get_event_name(), event.content)
             time.sleep(5)
 

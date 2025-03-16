@@ -15,15 +15,12 @@ def callback(ch, method, properties, body):
     ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
-def publish_events():
+def consume_events():
     with RabbitMQClient.ctx() as client:
         for event_class in event_classes:
-            event = event_class(content="event content")
-            client.queue_declare(event.get_event_name())
+            client.queue_declare(event_class.get_event_name())
 
-        while True:
-            event = Type2Event(content="event content")
-            client.consume(event.get_event_name(), callback)
+        client.consume(Type2Event.get_event_name(), callback)
 
 
-publish_events()
+consume_events()
