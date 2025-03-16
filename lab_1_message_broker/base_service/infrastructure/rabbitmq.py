@@ -45,7 +45,8 @@ class RabbitMQClient:
         auto_connect: bool = True,
     ):
         self.parameters = parameters or get_pika_parameters()
-        self.connection, self.channel = None, None
+        self.connection: pika.BlockingConnection | None = None
+        self.channel: pika.adapters.blocking_connection.BlockingChannel | None = None
         if auto_connect:
             self.connect()
 
@@ -73,13 +74,27 @@ class RabbitMQClient:
         finally:
             client.close()
 
-    def publish(self, event_name, message, durable=True):
-        self.channel.queue_declare(queue=event_name, durable=durable)
+    def queue_declare(
+        self,
+        queue_name: str,
+        durable: bool = True,
+        prefetch_count: int | None = 1
+    ):
+        self.channel.queue_declare(queue=queue_name, durable=durable)
+        if prefetch_count is not None:
+            self.channel.basic_qos(prefetch_count=prefetch_count)
+        logger.info(f"Declared queue {queue_name}")
+
+    def publish(self, event_name, message, persistent: bool = True):
         self.channel.basic_publish(
             exchange="",
             routing_key=event_name,
             body=message,
-            properties=pika.BasicProperties(delivery_mode=pika.DeliveryMode.Persistent),
+            properties=(
+                pika.BasicProperties(delivery_mode=pika.DeliveryMode.Persistent)
+                if persistent
+                else None
+            ),
         )
         logger.info(f"Published {event_name}: {message}")
 
@@ -87,14 +102,8 @@ class RabbitMQClient:
         self,
         event_name: str,
         callback,
-        durable: bool = True,
-        prefetch_count: int | None = 1,
         auto_ack: bool = False,
     ):
-        self.channel.queue_declare(queue=event_name, durable=durable)
-        if prefetch_count is not None:
-            self.channel.basic_qos(prefetch_count=prefetch_count)
-
         self.channel.basic_consume(
             queue=event_name, on_message_callback=callback, auto_ack=auto_ack
         )
