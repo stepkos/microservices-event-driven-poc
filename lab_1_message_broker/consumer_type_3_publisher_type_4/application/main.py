@@ -10,7 +10,7 @@ event_classes = BaseEvent.__subclasses__()
 def callback(ch, method, properties, body):
     body = body.decode()
     logger.info(f"Consuming message: {body}")
-    time.sleep(3)
+    time.sleep(2)
     send_event_4()
     logger.info(f"Done consuming message: {body}")
     ch.basic_ack(delivery_tag=method.delivery_tag)
