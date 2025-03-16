@@ -66,3 +66,19 @@ services:
         condition: service_healthy
     env_file:
       - .env
+
+  consumer_type_4_events:
+    build: consumer_type_4_events
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  consumer_type_3_publisher_type_4:
+    build: consumer_type_3_publisher_type_4
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - .env

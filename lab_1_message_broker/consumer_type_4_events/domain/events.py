@@ -10,5 +10,5 @@ class BaseEvent(ABC):
         return cls.__name__
 
 
-class Type2Event(BaseEvent):
+class Type4Event(BaseEvent):
     pass
